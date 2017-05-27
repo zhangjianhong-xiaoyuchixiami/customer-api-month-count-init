@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 public class CustomerApiTypeConsumeDetail implements Serializable {
 
     private Integer id;
+    private String yearMonth;
     private Integer amount;
     private Timestamp createTime;
     private Integer apiTypeId;
@@ -24,6 +25,14 @@ public class CustomerApiTypeConsumeDetail implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getYearMonth() {
+        return yearMonth;
+    }
+
+    public void setYearMonth(String yearMonth) {
+        this.yearMonth = yearMonth;
     }
 
     public Integer getAmount() {

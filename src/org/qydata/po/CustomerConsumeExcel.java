@@ -11,6 +11,8 @@ public class CustomerConsumeExcel implements Serializable {
     private byte [] excelCode;
     private Integer customerId;
     private String consuTime;
+    private Integer year;
+    private Integer month;
 
     public Integer getId() {
         return id;
@@ -42,5 +44,21 @@ public class CustomerConsumeExcel implements Serializable {
 
     public void setConsuTime(String consuTime) {
         this.consuTime = consuTime;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
     }
 }

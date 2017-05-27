@@ -8,9 +8,7 @@ import java.util.Date;
  */
 public class CustomerApiTypeConsume implements Serializable {
     private Integer id;
-    private Integer year;
-    private Integer month;
-    private Integer day;
+    private String yearMonth;
     private Integer apiTypeId;
     private Integer stid;
     private Integer sumAmount;
@@ -29,28 +27,12 @@ public class CustomerApiTypeConsume implements Serializable {
         this.id = id;
     }
 
-    public Integer getYear() {
-        return year;
+    public String getYearMonth() {
+        return yearMonth;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public Integer getMonth() {
-        return month;
-    }
-
-    public void setMonth(Integer month) {
-        this.month = month;
-    }
-
-    public Integer getDay() {
-        return day;
-    }
-
-    public void setDay(Integer day) {
-        this.day = day;
+    public void setYearMonth(String yearMonth) {
+        this.yearMonth = yearMonth;
     }
 
     public Integer getApiTypeId() {

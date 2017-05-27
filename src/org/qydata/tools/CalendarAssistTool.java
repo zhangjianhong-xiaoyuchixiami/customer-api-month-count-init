@@ -45,4 +45,31 @@ public class CalendarAssistTool {
         return year +"-"+ month;
     }
 
+    /**
+     * 取得当前时间的上一个月份的年份
+     * @return
+     */
+    public static int getCurrentDateLastMonthYear() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        return year ;
+    }
+
+    /**
+     * 取得当前时间的上一个月份的月份
+     * @return
+     */
+    public static int getCurrentDateLastMonthMonth() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        return month;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getCurrentDateLastMonthYear());
+        System.out.println(getCurrentDateLastMonthMonth());
+    }
+
 }
