@@ -4,13 +4,12 @@ import com.google.gson.Gson;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.qydata.po.ConsumeTime;
-import org.qydata.po.Customer;
-import org.qydata.po.CustomerConsumeExcel;
+import org.qydata.po.*;
 import org.qydata.tools.CalendarAssistTool;
 import org.qydata.tools.ExcelUtil;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,11 +50,10 @@ public class Entrance {
                 for (int i = 0; i < consumeTimeList.size(); i++) {
                     ConsumeTime consumeTime = consumeTimeList.get(i);
                     if (consumeTimeDetailList != null) {
-
                         for (int r = 0; r < consumeTimeDetailList.size(); r++) {
                             ConsumeTime consumeTimeDetail = consumeTimeDetailList.get(r);
                             if (consumeTime.getYearMonth().equals(consumeTimeDetail.getYearMonth())) {
-                                consumeTime.setCustomerDetaiLList(consumeTimeDetail.getCustomerList());
+                                consumeTime.setCustomerDetaiLList(consumeTimeDetail.getCustomerDetaiLList());
                             }
                         }
 
@@ -74,14 +72,34 @@ public class Entrance {
                                 }
                             }
                         }
-
                     }
-
+                }
+            }
+            List<CustomerConsumeExcel> customerConsumeExcelList = new ArrayList<>();
+            if (consumeTimeList != null) {
+                for (int i = 0; i < consumeTimeList.size(); i++) {
+                    ConsumeTime consumeTime = consumeTimeList.get(i);
+                    List<Customer> customerList = consumeTime.getCustomerList();
+                    if (customerList != null) {
+                        for (int j = 0; j < customerList.size(); j++) {
+                            Customer customer = customerList.get(j);
+                            List<CustomerApiTypeConsume> customerApiTypeConsumeList = customer.getCustomerApiTypeConsumeList();
+                            List<CustomerApiTypeConsumeDetail> customerApiTypeConsumeDetailList = customer.getCustomerApiTypeConsumeDetailList();
+                            Map<String, Object> mapExcelParam = new HashMap<>();
+                            mapExcelParam.put("consuTime", consumeTime.getYearMonth());
+                            mapExcelParam.put("year", consumeTime.getYear());
+                            mapExcelParam.put("month", consumeTime.getMonth());
+                            mapExcelParam.put("customerId", customer.getCustomerId());
+                            mapExcelParam.put("customerApiTypeConsumeList", customerApiTypeConsumeList);
+                            mapExcelParam.put("customerApiTypeConsumeDetailList", customerApiTypeConsumeDetailList);
+                            CustomerConsumeExcel customerConsumeExcel = ExcelUtil.createExcel(mapExcelParam);
+                            customerConsumeExcelList.add(customerConsumeExcel);
+                        }
+                    }
                 }
             }
 
             //添加
-            List<CustomerConsumeExcel> customerConsumeExcelList = ExcelUtil.createExcel(consumeTimeList);
             if(customerConsumeExcelList.size() > 0) {
                 String statementInsert = "org.qydata.mapper.CustomerApiTypeConsumeMapper.insertCustomerConsumeExcel";
                 int result = session.insert(statementInsert, customerConsumeExcelList);

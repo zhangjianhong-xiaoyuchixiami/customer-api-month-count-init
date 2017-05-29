@@ -27,7 +27,7 @@
 
     <resultMap id="CustomerApiTypeConsume_Detail_Map" type="org.qydata.po.ConsumeTime">
         <result column="yearMonth" property="yearMonth" />
-        <collection property="customerList" ofType="org.qydata.po.Customer">
+        <collection property="customerDetaiLList" ofType="org.qydata.po.Customer">
             <result column="customerId" property="customerId" />
             <collection property="customerApiTypeConsumeDetailList" ofType="org.qydata.po.CustomerApiTypeConsumeDetail">
                 <result column="id" property="id" />
@@ -52,9 +52,9 @@
         LEFT JOIN qyfinance.bkvwMobileOperator c ON a.stid=c.id
         LEFT JOIN qyfinance.bkvwCustomer d ON a.customerId=d.id
         WHERE
-                <![CDATA[
-                    a.consuTime <= '2017-04-30'
-                ]]>
+        <![CDATA[
+            a.consuTime <= '2017-04-30'
+        ]]>
     </select>
 
     <!--统计当前月的上一个月统计消费（明细）-->
@@ -67,9 +67,9 @@
         INNER JOIN qycauth.cbkvwCustomerRequestLog b ON a.reqId=b.requestId
         LEFT JOIN qyfinance.bkvwApiType c ON b.apiTypeId=c.id
         LEFT JOIN qyfinance.bkvwMobileOperator d ON b.stid=d.id
-        WHERE a.customerId in(9,23)
+        WHERE
         <![CDATA[
-              AND a.createTime >= '2017-01-01 00:00:00' AND a.createTime <= '2017-01-30 23:59:59'
+             a.createTime <= '2017-04-30 23:59:59'
          ]]>
     </select>
 

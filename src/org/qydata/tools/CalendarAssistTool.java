@@ -67,9 +67,28 @@ public class CalendarAssistTool {
         return month;
     }
 
-    public static void main(String[] args) {
-        System.out.println(getCurrentDateLastMonthYear());
-        System.out.println(getCurrentDateLastMonthMonth());
+    /**
+     * 取得某年某月的最后一天
+     * @param year
+     * @param month
+     * @return
+     */
+    public static String getInYearInMonthEndDay(Integer year,Integer month){
+        int day = 0;
+        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
+            day = 31;
+        }else {
+            if (month == 4 || month == 6 || month == 8 || month == 11){
+                day = 30;
+            }else {
+                if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+                    day = 29;
+                }else {
+                    day = 28;
+                }
+            }
+        }
+        return year+"-"+month+"-"+day;
     }
 
 }
