@@ -53,8 +53,9 @@
         LEFT JOIN qyfinance.bkvwCustomer d ON a.customerId=d.id
         WHERE
         <![CDATA[
-            a.consuTime <= '2017-04-30'
+            a.consuTime <= #{lastDay}
         ]]>
+        ORDER BY apiTypeName DESC,consuTime ASC
     </select>
 
     <!--统计当前月的上一个月统计消费（明细）-->
@@ -69,7 +70,7 @@
         LEFT JOIN qyfinance.bkvwMobileOperator d ON b.stid=d.id
         WHERE
         <![CDATA[
-             a.createTime <= '2017-04-30 23:59:59'
+             a.createTime <= #{lastDay}
          ]]>
     </select>
 

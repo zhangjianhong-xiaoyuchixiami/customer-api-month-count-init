@@ -7,9 +7,9 @@
             <transactionManager type="JDBC" /> <!-- 配置数据库连接信息 -->
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver" />
-                <property name="url" value="jdbc:mysql://192.168.111.147:3306" />
-                <property name="username" value="qianyan" />
-                <property name="password" value="qianyan_data" />
+                <property name="url" value="jdbc:mysql://192.168.1.99:3306" />
+                <property name="username" value="qy-c" />
+                <property name="password" value="bX18lqm%62" />
             </dataSource>
         </environment>
     </environments>

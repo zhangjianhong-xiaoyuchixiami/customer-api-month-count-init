@@ -1,7 +1,11 @@
 package org.qydata.tools;
 
-import org.apache.poi.hssf.usermodel.*;
+
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.qydata.po.CustomerApiTypeConsume;
 import org.qydata.po.CustomerApiTypeConsumeDetail;
@@ -9,10 +13,7 @@ import org.qydata.po.CustomerConsumeExcel;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Administrator on 2017/1/10.
@@ -55,8 +56,11 @@ public class ExcelUtil {
 
         //第一步创建workbook
         HSSFWorkbook wb = new HSSFWorkbook();
+
+        //SXSSFWorkbook wb = new SXSSFWorkbook(100);
+
         //第二步创建按天消费统计sheet
-        HSSFSheet sheet = wb.createSheet(consuTime+"按天消费统计");
+        Sheet sheet = wb.createSheet(consuTime+"按天消费统计");
 
         sheet.setColumnWidth(0, 31 * 256);//设置第0列的宽度是31个字符宽度
         sheet.setColumnWidth(1, 31 * 256);//设置第1列的宽度是31个字符宽度
@@ -65,14 +69,8 @@ public class ExcelUtil {
 
         //第三步创建行row:添加表头行
 
-        HSSFRow row = sheet.createRow(0);
-        HSSFCell cell = row.createCell(0);
-        cell.setCellValue("说明：如对账单有所疑问，烦请贵公司与我们联系");
-        row.setHeightInPoints(20);//设置行的高度是20个点
-        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 3);
-        sheet.addMergedRegion(region);
-        HSSFCellStyle style = wb.createCellStyle();
-        HSSFFont font = wb.createFont();   // 设置字体加粗
+        CellStyle style = wb.createCellStyle();
+        Font font = wb.createFont();   // 设置字体加粗
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         style.setFont(font);
         style.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);//设置图案颜色
@@ -82,6 +80,13 @@ public class ExcelUtil {
         style.setBorderBottom(HSSFCellStyle.BORDER_THIN);//下边框
         style.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
         style.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
+
+        Row row = sheet.createRow(0);
+        Cell cell = row.createCell(0);
+        cell.setCellValue("说明：如对账单有所疑问，烦请贵公司与我们联系");
+        row.setHeightInPoints(20);//设置行的高度是20个点
+        CellRangeAddress region = new CellRangeAddress(0, 0, 0, 3);
+        sheet.addMergedRegion(region);
         cell.setCellStyle(style);
 
         row = sheet.createRow(1);
@@ -92,20 +97,15 @@ public class ExcelUtil {
         sheet.addMergedRegion(region);
         cell.setCellStyle(style);
 
-
-        style = wb.createCellStyle();
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  //设置字体居中
-        font = wb.createFont();   // 设置字体加粗
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-        style.setFont(font);
-        style.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);//设置图案颜色
-        style.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);//设置图案背景色
-        style.setFillPattern(HSSFCellStyle.THIN_FORWARD_DIAG);//设置图案样式
-        style.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
-        style.setBorderBottom(HSSFCellStyle.BORDER_THIN);//下边框
-        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
-        style.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
         row = sheet.createRow(2);
+        cell = row.createCell(0);
+        cell.setCellValue("对账日期：" + sdf.format(new Date()));
+        row.setHeightInPoints(20);//设置行的高度是20个点
+        region = new CellRangeAddress(2, 2, 0, 3);
+        sheet.addMergedRegion(region);
+        cell.setCellStyle(style);
+
+        row = sheet.createRow(3);
         row.setHeightInPoints(20);//设置行的高度是20个点
         //第四步创建单元格
         cell = row.createCell(0);         //第一个单元格
@@ -125,8 +125,8 @@ public class ExcelUtil {
         cell.setCellValue("扣费次数");
         cell.setCellStyle(style);
 
-        //创建消费明细sheetDetail
-        HSSFSheet sheetDetail = wb.createSheet(consuTime+"消费明细");
+        /*//创建消费明细sheetDetail
+        Sheet sheetDetail = wb.createSheet(consuTime+"消费明细");
 
         sheetDetail.setColumnWidth(0, 31 * 256);//设置第0列的宽度是31个字符宽度
         sheetDetail.setColumnWidth(1, 31 * 256);//设置第1列的宽度是31个字符宽度
@@ -137,18 +137,6 @@ public class ExcelUtil {
 
         //创建行row:添加表头0行
         row = sheetDetail.createRow(0);
-        style = wb.createCellStyle();
-        font = wb.createFont();
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  //设置字体居中
-        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-        style.setFont(font);
-        style.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);//设置图案颜色
-        style.setFillBackgroundColor(HSSFColor.GREY_25_PERCENT.index);//设置图案背景色
-        style.setFillPattern(HSSFCellStyle.THIN_FORWARD_DIAG);//设置图案样式
-        style.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
-        style.setBorderBottom(HSSFCellStyle.BORDER_THIN);//下边框
-        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
-        style.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
         row.setHeightInPoints(20);//设置行的高度是20个点
 
         //创建明细单元格
@@ -170,7 +158,7 @@ public class ExcelUtil {
 
         cell = row.createCell(4);                   //第五个单元格
         cell.setCellValue("reqId");
-        cell.setCellStyle(style);
+        cell.setCellStyle(style);*/
 
         style = wb.createCellStyle();
         style.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);//设置图案颜色
@@ -185,7 +173,7 @@ public class ExcelUtil {
         if (customerApiTypeConsumeList != null){
             for (int j = 0; j < customerApiTypeConsumeList.size(); j++) {
                 CustomerApiTypeConsume customerApiTypeConsume = customerApiTypeConsumeList.get(j);
-                row = sheet.createRow(j + 3);
+                row = sheet.createRow(j + 4);
                 //创建单元格并且添加数据
                 cell = row.createCell(0);
                 cell.setCellStyle(style);
@@ -212,7 +200,7 @@ public class ExcelUtil {
                     cell.setCellValue(customerApiTypeConsume.getCountSuccess());
                 }
             }
-            row = sheet.createRow(customerApiTypeConsumeList.size() + 3);
+            row = sheet.createRow(customerApiTypeConsumeList.size() + 4);
             cell = row.createCell(0);
             cell.setCellStyle(style);
             cell.setCellValue("总计");
@@ -222,15 +210,15 @@ public class ExcelUtil {
 
             cell = row.createCell(2);
             cell.setCellStyle(style);
-            cell.setCellFormula("sum(C4:C"+(customerApiTypeConsumeList.size() + 3)+")");
+            cell.setCellFormula("sum(C5:C"+(customerApiTypeConsumeList.size() + 4)+")");
 
             cell = row.createCell(3);
             cell.setCellStyle(style);
-            cell.setCellFormula("sum(D4:D"+(customerApiTypeConsumeList.size() + 3)+")");
+            cell.setCellFormula("sum(D5:D"+(customerApiTypeConsumeList.size() + 4)+")");
 
         }
 
-        //循环遍历生成明细的Excel
+        /*//循环遍历生成明细的Excel
         if (customerApiTypeConsumeDetailList != null){
             for (int r=0; r<customerApiTypeConsumeDetailList.size(); r++){
                 CustomerApiTypeConsumeDetail customerApiTypeConsumeDetail = customerApiTypeConsumeDetailList.get(r);
@@ -266,24 +254,7 @@ public class ExcelUtil {
                     cell.setCellValue(customerApiTypeConsumeDetail.getReqId());
                 }
             }
-            row = sheetDetail.createRow(customerApiTypeConsumeDetailList.size() + 1);
-            cell = row.createCell(0);
-            cell.setCellStyle(style);
-            cell.setCellValue("总计");
-
-            cell = row.createCell(1);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(2);
-            cell.setCellStyle(style);
-            cell.setCellFormula("sum(C2:C"+(customerApiTypeConsumeDetailList.size() + 1)+")");
-
-            cell = row.createCell(3);
-            cell.setCellStyle(style);
-
-            cell = row.createCell(4);
-            cell.setCellStyle(style);
-        }
+        }*/
 
         CustomerConsumeExcel customerConsumeExcel = new CustomerConsumeExcel();
 
@@ -292,7 +263,8 @@ public class ExcelUtil {
         FileInputStream fis = null;
         ByteArrayOutputStream out = null;
         try {
-            File file = new File("D:\\finance\\" + consuTime + "\\"+customerId+"@"+consuTime+".xls");
+            File file = new File("/finance/" + consuTime + "/"+customerId+"@"+consuTime+".xlsx");
+            // File file = new File("D:\\finance\\" + consuTime + "\\"+customerId+"@"+consuTime+".xlsx");
             if (!file.exists()) {
                 file.getParentFile().mkdirs();
                 file.createNewFile();

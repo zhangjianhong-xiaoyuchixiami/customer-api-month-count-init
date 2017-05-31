@@ -1,6 +1,5 @@
 package org.qydata.main;
 
-import com.google.gson.Gson;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -39,12 +38,11 @@ public class Entrance {
             mapParam.put("lastDay",CalendarAssistTool.getCurrentDateLastMonthEndDay());
             List<ConsumeTime> consumeTimeList = session.selectList(statementSelect, mapParam);
 
-            String statementDetailSelect = "org.qydata.mapper.CustomerApiTypeConsumeMapper.queryCustomerLastMonthConsumeDetail";
+            /*String statementDetailSelect = "org.qydata.mapper.CustomerApiTypeConsumeMapper.queryCustomerLastMonthConsumeDetail";
             Map<String, Object> mapDetailParam = new HashMap<>();
             mapDetailParam.put("lastDay",CalendarAssistTool.getCurrentDateLastMonthEndDay()+" "+"23:59:59");
             List<ConsumeTime> consumeTimeDetailList = session.selectList(statementDetailSelect, mapDetailParam);
 
-            System.out.println(new Gson().toJson(consumeTimeDetailList));
 
             if (consumeTimeList != null) {
                 for (int i = 0; i < consumeTimeList.size(); i++) {
@@ -74,7 +72,8 @@ public class Entrance {
                         }
                     }
                 }
-            }
+            }*/
+
             List<CustomerConsumeExcel> customerConsumeExcelList = new ArrayList<>();
             if (consumeTimeList != null) {
                 for (int i = 0; i < consumeTimeList.size(); i++) {
